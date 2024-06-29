@@ -20,11 +20,11 @@ const Layout = () => {
         }}
       >
         <List>
-          <ListItem button component="a" href="/resize">
+          <ListItem button component="a" href="/image-basics">
             <ListItemText primary="Image Basics with openCV" />
           </ListItem>
-          <ListItem button component="a" href="/home">
-            <ListItemText primary="Home" />
+          <ListItem button component="a" href="/image-processing">
+            <ListItemText primary="Image Processing" />
           </ListItem>
           <ListItem button component="a" href="/about">
             <ListItemText primary="About" />

@@ -3,9 +3,9 @@ import { StyledEngineProvider } from "@mui/material";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import Layout from "./components/Layout";
-import Home from "./components/Home";
+import ImageProcessing from "./components/ImageProcessing";
 import About from "./components/About";
-import Resize from "./components/Resize";
+import ImageBasics from "./components/ImageBasics";
 
 export default function App() {
   return (
@@ -13,8 +13,8 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Layout />}>
-            <Route path="resize" element={<Resize />} />
-            <Route path="home" element={<Home />} />
+            <Route path="image-basics" element={<ImageBasics />} />
+            <Route path="image-processing" element={<ImageProcessing />} />
             <Route path="about" element={<About />} />
             {/* Add more routes here */}
           </Route>

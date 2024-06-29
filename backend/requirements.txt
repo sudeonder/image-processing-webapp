@@ -4,3 +4,4 @@ types-redis
 uvicorn
 python-multipart 
 opencv-python
+matplotlib

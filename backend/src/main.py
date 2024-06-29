@@ -1,9 +1,17 @@
-from fastapi import FastAPI, File, UploadFile, Form
+
+from fastapi import FastAPI, File, UploadFile, Form, Query
 from fastapi.responses import JSONResponse, StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 import cv2
 import numpy as np
 from io import BytesIO
+
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
+# import image_processing
+from image_processing import resize_img, blank_image, draw_shape
 
 app = FastAPI()
 
@@ -32,12 +40,16 @@ async def resize_image_endpoint(
     width: int = Form(...), 
     height: int = Form(...)
 ):
+    print("here")
     contents = await file.read()
     nparr = np.frombuffer(contents, np.uint8)
+
+
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
     # Resize the image
-    resized_img = cv2.resize(img, (width, height))
+    resized_img = resize_img(img, width, height)
+
 
     # Convert the image to bytes
     _, buffer = cv2.imencode('.jpg', resized_img)
@@ -45,3 +57,19 @@ async def resize_image_endpoint(
 
     # Return the resized image
     return StreamingResponse(io_buf, media_type="image/jpeg")
+
+@app.get("/draw-shapes/")
+async def draw_shapes(shape: str = Query(...)):
+
+    
+    blank = blank_image(300, 300)
+    print(shape)
+    shaped = draw_shape(blank, shape)
+
+    # Convert the image to bytes
+    _, buffer = cv2.imencode('.jpg', shaped)
+    io_buf = BytesIO(buffer)
+
+    # Return the resized image
+    return StreamingResponse(io_buf, media_type="image/jpeg")
+

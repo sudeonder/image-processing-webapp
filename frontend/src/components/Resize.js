@@ -17,9 +17,10 @@ const Resize = () => {
           dimensions.height
         );
 
-        console.log(resizedImageData);
+        console.log("here");
 
         setResizedImage(resizedImageData);
+        console.log("Resized image:", resizedImageData);
       } catch (error) {
         console.error("Error resizing image:", error);
       }
