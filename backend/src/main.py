@@ -33,6 +33,33 @@ app.add_middleware(
 @app.get('/')
 def read_root():
     return {"Hello": "World"}
+
+
+@app.post("/blend-images/")
+async def blend_images_endpoint(
+    img1: UploadFile = File(...),
+    img2: UploadFile = File(...),
+    # alpha: float = Form(...) 
+):
+    alpha = 0.5
+    contents1 = await img1.read()
+    nparr1 = np.frombuffer(contents1, np.uint8)
+
+    contents2 = await img2.read()
+    nparr2 = np.frombuffer(contents2, np.uint8)
+
+    img1 = cv2.imdecode(nparr1, cv2.IMREAD_COLOR)
+    img2 = cv2.imdecode(nparr2, cv2.IMREAD_COLOR)
+
+    # Blend the images
+    blended_img = cv2.addWeighted(img1, alpha, img2, 1-alpha, 0)
+
+    # Convert the image to bytes
+    _, buffer = cv2.imencode('.jpg', blended_img)
+    io_buf = BytesIO(buffer)
+
+    # Return the blended image
+    return StreamingResponse(io_buf, media_type="image/jpeg")
    
 @app.post("/resize-image/")
 async def resize_image_endpoint(
@@ -40,7 +67,7 @@ async def resize_image_endpoint(
     width: int = Form(...), 
     height: int = Form(...)
 ):
-    print("here")
+
     contents = await file.read()
     nparr = np.frombuffer(contents, np.uint8)
 
